@@ -10,14 +10,19 @@ import com.example.learnerapp.presentation.institutions.InstitutionsScreen
 import com.example.learnerapp.presentation.institutions.InstitutionsViewModel
 import com.example.learnerapp.presentation.levels.CourseLevelsScreen
 import com.example.learnerapp.presentation.levels.CourseLevelsViewModel
+import com.example.learnerapp.presentation.login.AuthViewModel
+import com.example.learnerapp.presentation.login.LoginScreen
+import com.example.learnerapp.presentation.login.RegisterScreen
 import com.example.learnerapp.presentation.materials.MaterialsScreen
 import com.example.learnerapp.presentation.materials.MaterialsViewModel
 import com.example.learnerapp.presentation.schools.SchoolsScreen
 import com.example.learnerapp.presentation.schools.SchoolsViewModel
+
 @Composable
 fun NavGraph(navController: NavHostController) {
 
     // Initialize ViewModels
+    val authVM = AuthViewModel()
     val institutionsVM = InstitutionsViewModel()
     val schoolsVM = SchoolsViewModel()
     val coursesVM = CoursesViewModel()
@@ -26,12 +31,31 @@ fun NavGraph(navController: NavHostController) {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Institutions.route
+        startDestination = Screen.Login.route // Start at login
     ) {
+
+        // Login Screen
+        composable(Screen.Login.route) {
+            LoginScreen(
+                navController = navController,
+                authViewModel = authVM
+            )
+        }
+
+        // Register Screen
+        composable(Screen.Register.route) {
+            RegisterScreen(
+                navController = navController,
+                authViewModel = authVM
+            )
+        }
 
         // Institutions
         composable(Screen.Institutions.route) {
-            InstitutionsScreen(navController = navController, viewModel = institutionsVM)
+            InstitutionsScreen(
+                navController = navController,
+                viewModel = institutionsVM
+            )
         }
 
         // Schools
@@ -40,7 +64,11 @@ fun NavGraph(navController: NavHostController) {
             arguments = listOf(navArgument("institution") { type = NavType.StringType })
         ) { backStackEntry ->
             val institution = backStackEntry.arguments?.getString("institution") ?: ""
-            SchoolsScreen(navController = navController, institution = institution, viewModel = schoolsVM)
+            SchoolsScreen(
+                navController = navController,
+                institution = institution,
+                viewModel = schoolsVM
+            )
         }
 
         // Courses
@@ -49,7 +77,11 @@ fun NavGraph(navController: NavHostController) {
             arguments = listOf(navArgument("school") { type = NavType.StringType })
         ) { backStackEntry ->
             val school = backStackEntry.arguments?.getString("school") ?: ""
-            CoursesScreen(navController = navController, school = school, viewModel = coursesVM)
+            CoursesScreen(
+                navController = navController,
+                school = school,
+                viewModel = coursesVM
+            )
         }
 
         // Levels (Years/Semesters)
@@ -58,7 +90,11 @@ fun NavGraph(navController: NavHostController) {
             arguments = listOf(navArgument("course") { type = NavType.StringType })
         ) { backStackEntry ->
             val course = backStackEntry.arguments?.getString("course") ?: ""
-            CourseLevelsScreen(navController = navController, course = course, viewModel = levelsVM)
+            CourseLevelsScreen(
+                navController = navController,
+                course = course,
+                viewModel = levelsVM
+            )
         }
 
         // Materials
@@ -71,7 +107,12 @@ fun NavGraph(navController: NavHostController) {
         ) { backStackEntry ->
             val course = backStackEntry.arguments?.getString("course") ?: ""
             val level = backStackEntry.arguments?.getString("level") ?: ""
-            MaterialsScreen(navController = navController, course = course, level = level, viewModel = materialsVM)
+            MaterialsScreen(
+                navController = navController,
+                course = course,
+                level = level,
+                viewModel = materialsVM
+            )
         }
     }
 }

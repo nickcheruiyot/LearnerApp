@@ -1,40 +1,49 @@
 package com.example.learnerapp.presentation.login
 import androidx.lifecycle.ViewModel
-import com.example.learnerapp.data.repository.AuthRepository
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class AuthViewModel : ViewModel() {
 
-    private val repository = AuthRepository()
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    private val _authState = MutableStateFlow(false)
-    val authState: StateFlow<Boolean> = _authState
+    private val _loginState = MutableStateFlow<String?>(null)
+    val loginState: StateFlow<String?> = _loginState
 
-    private val _error = MutableStateFlow("")
-    val error: StateFlow<String> = _error
+    fun login(email: String, password: String, onSuccess: () -> Unit) {
 
-    fun login(email: String, password: String) {
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
 
-        repository.login(email, password) { success, message ->
+                if (task.isSuccessful) {
+                    onSuccess()
+                } else {
+                    _loginState.value = task.exception?.message
+                }
 
-            if (success) {
-                _authState.value = true
-            } else {
-                _error.value = message ?: "Login failed"
             }
-        }
     }
 
-    fun register(email: String, password: String) {
+    fun register(email: String, password: String, onSuccess: () -> Unit) {
 
-        repository.register(email, password) { success, message ->
+        auth.createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
 
-            if (success) {
-                _authState.value = true
-            } else {
-                _error.value = message ?: "Registration failed"
+                if (task.isSuccessful) {
+                    onSuccess()
+                } else {
+                    _loginState.value = task.exception?.message
+                }
+
             }
-        }
+    }
+
+    fun logout() {
+        auth.signOut()
+    }
+
+    fun isLoggedIn(): Boolean {
+        return auth.currentUser != null
     }
 }

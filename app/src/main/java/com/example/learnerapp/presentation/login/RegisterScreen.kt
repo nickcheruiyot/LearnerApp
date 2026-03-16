@@ -1,123 +1,100 @@
 package com.example.learnerapp.presentation.login
-
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.learnerapp.presentation.navigation.Screen
 
 @Composable
-fun RegisterScreen(navController: NavController, viewModel: AuthViewModel) {
+fun RegisterScreen(
+    navController: NavController,
+    authViewModel: AuthViewModel = viewModel()
+) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var confirmVisible by remember { mutableStateOf(false) }
 
-    val authState by viewModel.authState.collectAsState()
-    val error by viewModel.error.collectAsState()
-
-    LaunchedEffect(authState) {
-        if (authState) {
-            navController.navigate("institutions") {
-                popUpTo("register") { inclusive = true }
-            }
-        }
-    }
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp),
-        verticalArrangement = Arrangement.Center
+            .background(
+                Brush.verticalGradient(
+                    listOf(
+                        Color(0xFF004D40),
+                        Color(0xFF26A69A)
+                    )
+                )
+            )
     ) {
-        Text("Register", fontSize = 32.sp)
 
-        Spacer(modifier = Modifier.height(30.dp))
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            singleLine = true,
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            trailingIcon = {
-                val text = if (passwordVisible) "Hide" else "Show"
-                Text(
-                    text,
-                    modifier = Modifier.clickable { passwordVisible = !passwordVisible },
-                    color = MaterialTheme.colorScheme.primary
-                )
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        OutlinedTextField(
-            value = confirmPassword,
-            onValueChange = { confirmPassword = it },
-            label = { Text("Confirm Password") },
-            singleLine = true,
-            visualTransformation = if (confirmVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            trailingIcon = {
-                val text = if (confirmVisible) "Hide" else "Show"
-                Text(
-                    text,
-                    modifier = Modifier.clickable { confirmVisible = !confirmVisible },
-                    color = MaterialTheme.colorScheme.primary
-                )
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        if (error.isNotEmpty()) {
-            Text(error, color = MaterialTheme.colorScheme.error)
-            Spacer(modifier = Modifier.height(10.dp))
-        }
-
-        Button(
-            onClick = {
-                if (password != confirmPassword) {
-                    viewModel.register(email.trim(), "") // trigger error
-                    return@Button
-                }
-                viewModel.register(email.trim(), password)
-            },
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Register")
-        }
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Text(
-            text = "Already have an account? Login",
-            color = MaterialTheme.colorScheme.primary,
+        Card(
             modifier = Modifier
-                .clickable { navController.navigate("login") }
-                .padding(8.dp)
-        )
+                .fillMaxWidth()
+                .padding(24.dp)
+                .align(Alignment.Center),
+            shape = RoundedCornerShape(20.dp)
+        ) {
+
+            Column(
+                modifier = Modifier.padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+
+                Text(
+                    text = "Create Account",
+                    style = MaterialTheme.typography.headlineMedium
+                )
+
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { email = it },
+                    label = { Text("Email") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { password = it },
+                    label = { Text("Password") },
+                    visualTransformation = PasswordVisualTransformation(),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                Button(
+                    onClick = {
+
+                        authViewModel.register(email, password) {
+
+                            navController.navigate(Screen.Institutions.route) {
+                                popUpTo(Screen.Register.route) { inclusive = true }
+                            }
+
+                        }
+
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text("Register")
+                }
+
+                TextButton(
+                    onClick = {
+                        navController.navigate(Screen.Login.route)
+                    }
+                ) {
+                    Text("Already have an account? Login")
+                }
+            }
+        }
     }
 }
