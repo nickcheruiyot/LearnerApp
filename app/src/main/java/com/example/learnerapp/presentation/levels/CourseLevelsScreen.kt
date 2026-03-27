@@ -38,7 +38,7 @@ fun CourseLevelsScreen(
                         .fillMaxWidth()
                         .padding(10.dp)
                         .clickable {
-                            navController.navigate("materials/$course/$level")
+                            navController.navigate("units/$course/$level")
                         },
                     shape = RoundedCornerShape(14.dp)
                 ) {

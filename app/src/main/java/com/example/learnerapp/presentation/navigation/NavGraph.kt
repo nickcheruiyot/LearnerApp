@@ -2,7 +2,8 @@ package com.example.learnerapp.presentation.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.learnerapp.presentation.courses.CoursesScreen
 import com.example.learnerapp.presentation.courses.CoursesViewModel
@@ -17,100 +18,100 @@ import com.example.learnerapp.presentation.materials.MaterialsScreen
 import com.example.learnerapp.presentation.materials.MaterialsViewModel
 import com.example.learnerapp.presentation.schools.SchoolsScreen
 import com.example.learnerapp.presentation.schools.SchoolsViewModel
+import com.example.learnerapp.presentation.units.UnitsScreen
+import com.example.learnerapp.presentation.units.UnitsViewModel
 
 @Composable
 fun NavGraph(navController: NavHostController) {
 
-    // Initialize ViewModels
     val authVM = AuthViewModel()
     val institutionsVM = InstitutionsViewModel()
     val schoolsVM = SchoolsViewModel()
     val coursesVM = CoursesViewModel()
     val levelsVM = CourseLevelsViewModel()
     val materialsVM = MaterialsViewModel()
+    val unitsVM = UnitsViewModel() // ✅ NEW
 
     NavHost(
         navController = navController,
-        startDestination = Screen.Login.route // Start at login
+        startDestination = Screen.Login.route
     ) {
 
-        // Login Screen
+        // Login
         composable(Screen.Login.route) {
-            LoginScreen(
-                navController = navController,
-                authViewModel = authVM
-            )
+            LoginScreen(navController, authVM)
         }
 
-        // Register Screen
+        // Register
         composable(Screen.Register.route) {
-            RegisterScreen(
-                navController = navController,
-                authViewModel = authVM
-            )
+            RegisterScreen(navController, authVM)
         }
 
         // Institutions
         composable(Screen.Institutions.route) {
-            InstitutionsScreen(
-                navController = navController,
-                viewModel = institutionsVM
-            )
+            InstitutionsScreen(navController, institutionsVM)
         }
 
         // Schools
         composable(
-            route = Screen.Schools.route,
+            Screen.Schools.route,
             arguments = listOf(navArgument("institution") { type = NavType.StringType })
         ) { backStackEntry ->
             val institution = backStackEntry.arguments?.getString("institution") ?: ""
-            SchoolsScreen(
-                navController = navController,
-                institution = institution,
-                viewModel = schoolsVM
-            )
+            SchoolsScreen(navController, institution, schoolsVM)
         }
 
         // Courses
         composable(
-            route = Screen.Courses.route,
+            Screen.Courses.route,
             arguments = listOf(navArgument("school") { type = NavType.StringType })
         ) { backStackEntry ->
             val school = backStackEntry.arguments?.getString("school") ?: ""
-            CoursesScreen(
-                navController = navController,
-                school = school,
-                viewModel = coursesVM
-            )
+            CoursesScreen(navController, school, coursesVM)
         }
 
-        // Levels (Years/Semesters)
+        // Levels (Semesters)
         composable(
-            route = Screen.Levels.route,
+            Screen.Levels.route,
             arguments = listOf(navArgument("course") { type = NavType.StringType })
         ) { backStackEntry ->
             val course = backStackEntry.arguments?.getString("course") ?: ""
-            CourseLevelsScreen(
-                navController = navController,
-                course = course,
-                viewModel = levelsVM
-            )
+            CourseLevelsScreen(navController, course, levelsVM)
         }
 
-        // Materials
+        // ✅ NEW: Units Screen
         composable(
-            route = Screen.Materials.route,
+            Screen.Units.route,
             arguments = listOf(
                 navArgument("course") { type = NavType.StringType },
                 navArgument("level") { type = NavType.StringType }
             )
         ) { backStackEntry ->
+
             val course = backStackEntry.arguments?.getString("course") ?: ""
             val level = backStackEntry.arguments?.getString("level") ?: ""
-            MaterialsScreen(
+
+            UnitsScreen(
                 navController = navController,
                 course = course,
                 level = level,
+                viewModel = unitsVM
+            )
+        }
+
+        // ✅ UPDATED: Materials now uses UNIT
+        composable(
+            Screen.Materials.route,
+            arguments = listOf(
+                navArgument("unit") { type = NavType.StringType }
+            )
+        ) { backStackEntry ->
+
+            val unit = backStackEntry.arguments?.getString("unit") ?: ""
+
+            MaterialsScreen(
+                navController = navController,
+                unit = unit,
                 viewModel = materialsVM
             )
         }

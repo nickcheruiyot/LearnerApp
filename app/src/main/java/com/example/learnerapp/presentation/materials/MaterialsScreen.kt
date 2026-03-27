@@ -15,12 +15,11 @@ import androidx.navigation.NavController
 @Composable
 fun MaterialsScreen(
     navController: NavController,
-    course: String,
-    level: String,
+    unit: String,
     viewModel: MaterialsViewModel
 ) {
 
-    val materials = viewModel.getMaterials(course, level).collectAsState().value
+    val materials = viewModel.getMaterials(unit).collectAsState().value
 
     Column(
         modifier = Modifier
@@ -29,7 +28,7 @@ fun MaterialsScreen(
     ) {
 
         Text(
-            text = "Materials for $course Level $level",
+            text = "Materials for $unit",
             fontSize = 24.sp,
             modifier = Modifier.padding(bottom = 16.dp)
         )
