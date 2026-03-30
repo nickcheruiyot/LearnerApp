@@ -14,7 +14,6 @@ import com.example.learnerapp.presentation.levels.CourseLevelsViewModel
 import com.example.learnerapp.presentation.login.AuthViewModel
 import com.example.learnerapp.presentation.login.LoginScreen
 import com.example.learnerapp.presentation.login.RegisterScreen
-import com.example.learnerapp.presentation.materials.MaterialsScreen
 import com.example.learnerapp.presentation.materials.MaterialsViewModel
 import com.example.learnerapp.presentation.schools.SchoolsScreen
 import com.example.learnerapp.presentation.schools.SchoolsViewModel
@@ -30,7 +29,7 @@ fun NavGraph(navController: NavHostController) {
     val coursesVM = CoursesViewModel()
     val levelsVM = CourseLevelsViewModel()
     val materialsVM = MaterialsViewModel()
-    val unitsVM = UnitsViewModel() // ✅ NEW
+    val unitsVM = UnitsViewModel()
 
     NavHost(
         navController = navController,
@@ -79,7 +78,7 @@ fun NavGraph(navController: NavHostController) {
             CourseLevelsScreen(navController, course, levelsVM)
         }
 
-        // ✅ NEW: Units Screen
+        //  Units Screen
         composable(
             Screen.Units.route,
             arguments = listOf(
@@ -99,7 +98,6 @@ fun NavGraph(navController: NavHostController) {
             )
         }
 
-        // ✅ UPDATED: Materials now uses UNIT
         composable(
             Screen.Materials.route,
             arguments = listOf(
@@ -109,11 +107,6 @@ fun NavGraph(navController: NavHostController) {
 
             val unit = backStackEntry.arguments?.getString("unit") ?: ""
 
-            MaterialsScreen(
-                navController = navController,
-                unit = unit,
-                viewModel = materialsVM
-            )
         }
     }
 }
