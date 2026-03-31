@@ -26,9 +26,10 @@ class SchoolsViewModel : ViewModel() {
         )
     )
 
-    fun getSchools(institution: String): StateFlow<List<String>> {
-        val schools = schoolsData[institution] ?: emptyList()
-        val state = MutableStateFlow(schools)
-        return state.asStateFlow()
+    private val _schools = MutableStateFlow<List<String>>(emptyList())
+    val schools: StateFlow<List<String>> = _schools.asStateFlow()
+
+    fun loadSchools(institution: String) {
+        _schools.value = schoolsData[institution] ?: emptyList()
     }
 }
