@@ -1,12 +1,20 @@
 package com.example.learnerapp.presentation.units
-class UnitsViewModel {
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-    fun getUnits(course: String, level: String): List<String> {
-        return listOf(
-            "Unit 1",
-            "Unit 2",
-            "Unit 3",
-            "Unit 4"
+class UnitsViewModel : ViewModel() {
+
+    private val _units = MutableStateFlow<List<String>>(emptyList())
+    val units: StateFlow<List<String>> = _units.asStateFlow()
+
+    fun loadUnits(course: String, level: String) {
+
+        _units.value = listOf(
+            "$course Unit 1",
+            "$course Unit 2",
+            "$course Unit 3"
         )
     }
 }

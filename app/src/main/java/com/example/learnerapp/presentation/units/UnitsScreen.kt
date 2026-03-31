@@ -1,15 +1,20 @@
 package com.example.learnerapp.presentation.units
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.learnerapp.presentation.units.UnitsViewModel
 
 @Composable
 fun UnitsScreen(
@@ -19,7 +24,11 @@ fun UnitsScreen(
     viewModel: UnitsViewModel
 ) {
 
-    val units = viewModel.getUnits(course, level)
+    LaunchedEffect(course, level) {
+        viewModel.loadUnits(course, level)
+    }
+
+    val units = viewModel.units.collectAsState().value
 
     Column(Modifier.padding(16.dp)) {
 

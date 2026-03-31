@@ -20,7 +20,9 @@ fun SchoolsScreen(
     viewModel: SchoolsViewModel
 ) {
 
-    val schools = viewModel.getSchools(institution).collectAsState().value
+    viewModel.loadSchools(institution)
+
+    val schools = viewModel.schools.collectAsState().value
 
     Column(Modifier.padding(16.dp)) {
 

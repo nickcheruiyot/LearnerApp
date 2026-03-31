@@ -8,33 +8,26 @@ class MaterialsViewModel : ViewModel() {
 
     private val materialsData = mapOf(
 
-        "Unit 1" to listOf(
-            "Introduction to Programming Notes",
-            "Discrete Mathematics CAT 1",
-            "Computer Organization Notes"
+        "Computer Science Unit 1" to listOf(
+            "Programming Notes",
+            "CAT 1",
+            "Assignment"
         ),
 
-        "Unit 2" to listOf(
+        "Computer Science Unit 2" to listOf(
             "Data Structures Notes",
-            "Operating Systems Notes",
-            "Algorithms Assignment"
-        ),
-
-        "Unit 3" to listOf(
-            "Lecture Notes",
-            "Past Papers",
-            "Assignments"
+            "Past Papers"
         )
     )
 
-    fun getMaterials(unit: String): StateFlow<List<String>> {
+    private val _materials = MutableStateFlow<List<String>>(emptyList())
+    val materials: StateFlow<List<String>> = _materials.asStateFlow()
 
-        val materials = materialsData[unit] ?: listOf(
+    fun loadMaterials(unit: String) {
+        _materials.value = materialsData[unit] ?: listOf(
             "Lecture Notes",
             "Past Papers",
             "Assignments"
         )
-
-        return MutableStateFlow(materials).asStateFlow()
     }
 }

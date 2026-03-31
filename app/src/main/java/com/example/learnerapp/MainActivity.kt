@@ -3,6 +3,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -43,9 +44,12 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { innerPadding ->
-                    NavGraph(navController = navController)
+
+                    androidx.compose.foundation.layout.Box(
+                        modifier = androidx.compose.ui.Modifier.padding(innerPadding)
+                    ) {
+                        NavGraph(navController = navController)
+                    }
                 }
-            }
         }
-    }
-}
+    }}}
