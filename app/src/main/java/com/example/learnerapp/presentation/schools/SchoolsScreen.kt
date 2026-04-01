@@ -1,18 +1,25 @@
 package com.example.learnerapp.presentation.schools
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.learnerapp.ui.components.AppCard
+import com.example.learnerapp.ui.theme.PinkGradient
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SchoolsScreen(
     navController: NavController,
@@ -20,43 +27,36 @@ fun SchoolsScreen(
     viewModel: SchoolsViewModel
 ) {
 
-    viewModel.loadSchools(institution)
+    LaunchedEffect(institution) {
+        viewModel.loadSchools(institution)
+    }
 
     val schools = viewModel.schools.collectAsState().value
 
-    Column(Modifier.padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PinkGradient)
+            .padding(16.dp)
+    ) {
 
-        Text(
-            text = "Schools in $institution",
-            fontSize = 24.sp
-        )
+        Text("🏫 $institution", fontSize = 26.sp, color = Color.White)
+        Text("Select School", color = Color.White.copy(0.7f))
 
-        LazyColumn {
+        Spacer(modifier = Modifier.height(20.dp))
+
+        LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
 
             items(schools) { school ->
 
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .clickable {
-                            navController.navigate("courses/$school")
-                        },
-                    shape = RoundedCornerShape(14.dp)
+                AppCard(
+                    title = school,
+                    subtitle = "View courses",
+                    icon = "📘"
                 ) {
-
-                    Text(
-                        text = school,
-                        fontSize = 18.sp,
-                        modifier = Modifier.padding(20.dp)
-                    )
-
+                    navController.navigate("courses/$school")
                 }
-
             }
-
         }
-
     }
-
 }
