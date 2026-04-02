@@ -8,13 +8,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.learnerapp.ui.components.ShimmerItem
 
 @Composable
 fun CourseLevelsScreen(
@@ -23,12 +26,12 @@ fun CourseLevelsScreen(
     viewModel: CourseLevelsViewModel
 ) {
 
-    // ✅ THIS IS THE MISSING PIECE
+    //  Load data when screen opens
     LaunchedEffect(course) {
         viewModel.loadLevels(course)
     }
 
-    val levels = viewModel.levels.collectAsState().value
+    val state = viewModel.state.collectAsState().value
 
     Column(
         modifier = Modifier
@@ -55,48 +58,78 @@ fun CourseLevelsScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
+        when (state) {
 
-            items(levels) { level ->
-
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            navController.navigate("units/$course/$level")
-                        },
-                    shape = RoundedCornerShape(20.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White.copy(alpha = 0.1f)
-                    )
+            //  LOADING STATE (SHIMMER)
+            is LevelsState.Loading -> {
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-
-                    Row(
-                        modifier = Modifier
-                            .padding(20.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-
-                        Column {
-                            Text(
-                                text = "Semester $level",
-                                color = Color.White,
-                                fontSize = 18.sp
-                            )
-
-                            Text(
-                                text = "Tap to explore units",
-                                color = Color.LightGray,
-                                fontSize = 14.sp
-                            )
-                        }
-
-                        Text("➡️", fontSize = 20.sp)
+                    items(6) {
+                        ShimmerItem()
                     }
                 }
+            }
+
+            // ✅ SUCCESS STATE
+            is LevelsState.Success -> {
+
+                val successState = state as LevelsState.Success
+                val levels = successState.levels
+
+                LazyColumn(
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+
+                    items(levels) { level ->
+
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    navController.navigate("units/$course/$level")
+                                },
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color.White.copy(alpha = 0.1f)
+                            )
+                        ) {
+
+                            Row(
+                                modifier = Modifier
+                                    .padding(20.dp)
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+
+                                Column {
+                                    Text(
+                                        text = "Semester $level",
+                                        color = Color.White,
+                                        fontSize = 18.sp
+                                    )
+
+                                    Text(
+                                        text = "Tap to explore units",
+                                        color = Color.LightGray,
+                                        fontSize = 14.sp
+                                    )
+                                }
+
+                                Text("➡️", fontSize = 20.sp)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 📭 EMPTY STATE (FIXES YOUR ERROR)
+            is LevelsState.Empty -> {
+                Text(
+                    text = "No semesters available",
+                    color = Color.White,
+                    fontSize = 16.sp
+                )
             }
         }
     }

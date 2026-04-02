@@ -1,6 +1,5 @@
 package com.example.learnerapp.data.repository
 import com.google.firebase.auth.FirebaseAuth
-
 class AuthRepository {
 
     private val firebaseAuth = FirebaseAuth.getInstance()

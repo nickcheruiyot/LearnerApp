@@ -5,18 +5,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.Download
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.learnerapp.ui.components.ShimmerItem
 
 @Composable
 fun MaterialsScreen(
@@ -25,13 +24,11 @@ fun MaterialsScreen(
     viewModel: MaterialsViewModel
 ) {
 
-    // 🔥 Load materials once
+    val state = viewModel.state.collectAsState().value
+
     LaunchedEffect(unit) {
         viewModel.loadMaterials(unit)
     }
-
-    // ✅ Collect state properly
-    val materials = viewModel.materials.collectAsState().value
 
     Column(
         modifier = Modifier
@@ -45,61 +42,101 @@ fun MaterialsScreen(
     ) {
 
         Text(
-            text = "📚 $unit Materials",
+            text = "📘 $unit",
             fontSize = 26.sp,
-            color = Color.White,
-            modifier = Modifier.padding(bottom = 16.dp)
+            fontWeight = FontWeight.Bold,
+            color = Color.White
         )
 
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
+        Text(
+            text = "Study Materials",
+            fontSize = 14.sp,
+            color = Color.LightGray
+        )
 
-            items(materials) { material ->
+        Spacer(modifier = Modifier.height(20.dp))
 
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            // future: open file
-                        },
-                    shape = RoundedCornerShape(16.dp),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White.copy(alpha = 0.1f)
-                    )
+        when (state) {
+
+            // 🔄 LOADING
+            is MaterialsState.Loading -> {
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    items(5) {
+                        ShimmerItem()
+                    }
+                }
+            }
+
+            // ✅ SUCCESS
+            is MaterialsState.Success -> {
+                val materials = state.materials
+
+                LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    items(materials) { item ->
+
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    navController.navigate("material_detail/$item")
+                                },
+                            shape = RoundedCornerShape(18.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color.White.copy(alpha = 0.08f)
+                            )
+                        ) {
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(18.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+
+                                Column {
+                                    Text(
+                                        text = item,
+                                        fontSize = 18.sp,
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Color.White
+                                    )
+
+                                    Text(
+                                        text = "Tap to open",
+                                        fontSize = 13.sp,
+                                        color = Color.LightGray
+                                    )
+                                }
+
+                                Text("➡️", color = Color.White)
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 🟡 EMPTY STATE (IMPORTANT FIX)
+            is MaterialsState.Empty -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-
-                        Icon(
-                            imageVector = Icons.Default.Description,
-                            contentDescription = null,
-                            tint = Color.White
-                        )
-
-                        Spacer(modifier = Modifier.width(12.dp))
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                         Text(
-                            text = material,
-                            fontSize = 16.sp,
-                            color = Color.White,
-                            modifier = Modifier.weight(1f)
+                            text = "No Materials Available",
+                            fontSize = 18.sp,
+                            color = Color.White
                         )
 
-                        IconButton(onClick = {
-                            // future: download
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.Download,
-                                contentDescription = "Download",
-                                tint = Color.White
-                            )
-                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+
+                        Text(
+                            text = "Check back later",
+                            fontSize = 13.sp,
+                            color = Color.LightGray
+                        )
                     }
                 }
             }
