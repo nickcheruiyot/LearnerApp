@@ -1,5 +1,4 @@
 package com.example.learnerapp.data
-
 import com.google.firebase.database.FirebaseDatabase
 
 object RealtimeDb {

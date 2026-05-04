@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-// ✅ UI State
+//  UI State
 sealed class LevelsState {
     object Loading : LevelsState()
     data class Success(val levels: List<String>) : LevelsState()
@@ -23,7 +23,7 @@ class CourseLevelsViewModel : ViewModel() {
 
         val data = getLevelsForCourse(course)
 
-        // ✅ Handle result
+        //  Handle result
         _state.value = if (data.isEmpty()) {
             LevelsState.Empty
         } else {
