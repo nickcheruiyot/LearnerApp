@@ -19,7 +19,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
@@ -33,10 +32,8 @@ fun LoginScreen(
     var errorMessage by remember { mutableStateOf<String?>(null) }
     var showPassword by remember { mutableStateOf(false) }
 
-    // NEW STATE FROM VIEWMODEL
     val state by authViewModel.authState.collectAsState()
 
-    //  HANDLE STATE CHANGES
     LaunchedEffect(state) {
         when (state) {
 
@@ -58,7 +55,11 @@ fun LoginScreen(
     }
 
     val bg = Brush.verticalGradient(
-        listOf(Color(0xFF0F2027), Color(0xFF203A43), Color(0xFF2C5364))
+        colors = listOf(
+            Color(0xFF0F172A),
+            Color(0xFF1E293B),
+            Color(0xFF111827)
+        )
     )
 
     Box(
@@ -71,10 +72,12 @@ fun LoginScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp)
-                .shadow(20.dp, RoundedCornerShape(28.dp)),
+                .padding(horizontal = 24.dp)
+                .shadow(24.dp, RoundedCornerShape(28.dp)),
             shape = RoundedCornerShape(28.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White.copy(alpha = 0.08f)
+            )
         ) {
 
             Column(
@@ -84,35 +87,43 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                //  Title
                 Text(
                     text = "LearnerApp",
-                    fontSize = 28.sp,
+                    fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1B5E20)
+                    color = Color.White
                 )
+
+                Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = "Welcome back 👋",
+                    text = "Welcome back",
                     fontSize = 14.sp,
-                    color = Color.Gray
+                    color = Color.LightGray
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(28.dp))
 
-                //  Email
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
                     label = { Text("Email") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2563EB),
+                        unfocusedBorderColor = Color.Gray,
+                        focusedLabelColor = Color.White,
+                        unfocusedLabelColor = Color.LightGray,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        cursorColor = Color.White
+                    )
                 )
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                //  Password
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -122,22 +133,37 @@ fun LoginScreen(
                         if (showPassword) VisualTransformation.None
                         else PasswordVisualTransformation(),
                     trailingIcon = {
-                        IconButton(onClick = { showPassword = !showPassword }) {
+                        IconButton(
+                            onClick = {
+                                showPassword = !showPassword
+                            }
+                        ) {
                             Icon(
                                 imageVector =
-                                    if (showPassword) Icons.Default.Visibility
-                                    else Icons.Default.VisibilityOff,
-                                contentDescription = null
+                                    if (showPassword)
+                                        Icons.Default.Visibility
+                                    else
+                                        Icons.Default.VisibilityOff,
+                                contentDescription = null,
+                                tint = Color.White
                             )
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2563EB),
+                        unfocusedBorderColor = Color.Gray,
+                        focusedLabelColor = Color.White,
+                        unfocusedLabelColor = Color.LightGray,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        cursorColor = Color.White
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                //  Error message
                 errorMessage?.let {
                     Text(
                         text = it,
@@ -146,9 +172,8 @@ fun LoginScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(22.dp))
 
-                //  LOGIN BUTTON
                 Button(
                     onClick = {
                         errorMessage = null
@@ -165,10 +190,10 @@ fun LoginScreen(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(52.dp),
-                    shape = RoundedCornerShape(16.dp),
+                        .height(54.dp),
+                    shape = RoundedCornerShape(18.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF2E7D32)
+                        containerColor = Color(0xFF2563EB)
                     )
                 ) {
 
@@ -180,7 +205,7 @@ fun LoginScreen(
                         )
                     } else {
                         Text(
-                            "Login",
+                            text = "Login",
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -189,13 +214,13 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(18.dp))
 
-                //  REGISTER OPTION
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
+
                     Text(
                         text = "Don't have an account?",
-                        color = Color.Gray,
+                        color = Color.LightGray,
                         fontSize = 13.sp
                     )
 
@@ -203,7 +228,7 @@ fun LoginScreen(
 
                     Text(
                         text = "Sign up",
-                        color = Color(0xFF2E7D32),
+                        color = Color.White,
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.clickable {

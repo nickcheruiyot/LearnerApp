@@ -18,7 +18,7 @@ class CourseLevelsViewModel : ViewModel() {
 
     fun loadLevels(course: String) {
 
-        // 🔄 Show loading first
+        //  Show loading first
         _state.value = LevelsState.Loading
 
         val data = getLevelsForCourse(course)

@@ -71,7 +71,7 @@ fun CourseLevelsScreen(
                 }
             }
 
-            // ✅ SUCCESS STATE
+            // SUCCESS STATE
             is LevelsState.Success -> {
 
                 val successState = state as LevelsState.Success
@@ -123,7 +123,7 @@ fun CourseLevelsScreen(
                 }
             }
 
-            // 📭 EMPTY STATE (FIXES YOUR ERROR)
+            // EMPTY STATE (FIXES YOUR ERROR)
             is LevelsState.Empty -> {
                 Text(
                     text = "No semesters available",

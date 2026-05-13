@@ -37,8 +37,34 @@ fun RegisterScreen(
     var showPassword by remember { mutableStateOf(false) }
     var showConfirmPassword by remember { mutableStateOf(false) }
 
+    val state by authViewModel.authState.collectAsState()
+
+    LaunchedEffect(state) {
+        when (state) {
+
+            is AuthState.Loading -> {
+                isLoading = true
+            }
+
+            is AuthState.Success -> {
+                isLoading = false
+            }
+
+            is AuthState.Error -> {
+                isLoading = false
+                errorMessage = (state as AuthState.Error).message
+            }
+
+            else -> Unit
+        }
+    }
+
     val bg = Brush.verticalGradient(
-        listOf(Color(0xFF0F2027), Color(0xFF203A43), Color(0xFF2C5364))
+        colors = listOf(
+            Color(0xFF0F172A),
+            Color(0xFF1E293B),
+            Color(0xFF111827)
+        )
     )
 
     Box(
@@ -51,10 +77,12 @@ fun RegisterScreen(
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp)
-                .shadow(20.dp, RoundedCornerShape(28.dp)),
+                .padding(horizontal = 24.dp)
+                .shadow(24.dp, RoundedCornerShape(28.dp)),
             shape = RoundedCornerShape(28.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White.copy(alpha = 0.08f)
+            )
         ) {
 
             Column(
@@ -64,35 +92,43 @@ fun RegisterScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                // 🔥 Header
                 Text(
                     text = "Create Account",
-                    fontSize = 26.sp,
+                    fontSize = 30.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color(0xFF1B5E20)
+                    color = Color.White
                 )
+
+                Spacer(modifier = Modifier.height(6.dp))
 
                 Text(
-                    text = "Join LearnerApp 🚀",
-                    fontSize = 13.sp,
-                    color = Color.Gray
+                    text = "Start learning with LearnerApp",
+                    fontSize = 14.sp,
+                    color = Color.LightGray
                 )
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(28.dp))
 
-                // 📧 Email
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
                     label = { Text("Email") },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2563EB),
+                        unfocusedBorderColor = Color.Gray,
+                        focusedLabelColor = Color.White,
+                        unfocusedLabelColor = Color.LightGray,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        cursorColor = Color.White
+                    )
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                //  Password
                 OutlinedTextField(
                     value = password,
                     onValueChange = { password = it },
@@ -102,22 +138,37 @@ fun RegisterScreen(
                         if (showPassword) VisualTransformation.None
                         else PasswordVisualTransformation(),
                     trailingIcon = {
-                        IconButton(onClick = { showPassword = !showPassword }) {
+                        IconButton(
+                            onClick = {
+                                showPassword = !showPassword
+                            }
+                        ) {
                             Icon(
                                 imageVector =
-                                    if (showPassword) Icons.Default.Visibility
-                                    else Icons.Default.VisibilityOff,
-                                contentDescription = null
+                                    if (showPassword)
+                                        Icons.Default.Visibility
+                                    else
+                                        Icons.Default.VisibilityOff,
+                                contentDescription = null,
+                                tint = Color.White
                             )
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2563EB),
+                        unfocusedBorderColor = Color.Gray,
+                        focusedLabelColor = Color.White,
+                        unfocusedLabelColor = Color.LightGray,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        cursorColor = Color.White
+                    )
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-                //  Confirm Password
                 OutlinedTextField(
                     value = confirmPassword,
                     onValueChange = { confirmPassword = it },
@@ -127,24 +178,37 @@ fun RegisterScreen(
                         if (showConfirmPassword) VisualTransformation.None
                         else PasswordVisualTransformation(),
                     trailingIcon = {
-                        IconButton(onClick = {
-                            showConfirmPassword = !showConfirmPassword
-                        }) {
+                        IconButton(
+                            onClick = {
+                                showConfirmPassword = !showConfirmPassword
+                            }
+                        ) {
                             Icon(
                                 imageVector =
-                                    if (showConfirmPassword) Icons.Default.Visibility
-                                    else Icons.Default.VisibilityOff,
-                                contentDescription = null
+                                    if (showConfirmPassword)
+                                        Icons.Default.Visibility
+                                    else
+                                        Icons.Default.VisibilityOff,
+                                contentDescription = null,
+                                tint = Color.White
                             )
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp)
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = Color(0xFF2563EB),
+                        unfocusedBorderColor = Color.Gray,
+                        focusedLabelColor = Color.White,
+                        unfocusedLabelColor = Color.LightGray,
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        cursorColor = Color.White
+                    )
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
 
-                //  Error
                 errorMessage?.let {
                     Text(
                         text = it,
@@ -153,38 +217,47 @@ fun RegisterScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(22.dp))
 
-                //  Register Button
                 Button(
                     onClick = {
 
                         errorMessage = null
+
+                        if (email.isBlank()) {
+                            errorMessage = "Email required"
+                            return@Button
+                        }
+
+                        if (password.length < 6) {
+                            errorMessage =
+                                "Password must be at least 6 characters"
+                            return@Button
+                        }
 
                         if (password != confirmPassword) {
                             errorMessage = "Passwords do not match"
                             return@Button
                         }
 
-                        isLoading = true
-
                         authViewModel.register(
                             email.trim(),
                             password.trim(),
                             onSuccess = {
-                                isLoading = false
                                 navController.navigate("institutions") {
-                                    popUpTo("register") { inclusive = true }
+                                    popUpTo("register") {
+                                        inclusive = true
+                                    }
                                 }
                             }
                         )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(50.dp),
-                    shape = RoundedCornerShape(16.dp),
+                        .height(54.dp),
+                    shape = RoundedCornerShape(18.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF1B5E20)
+                        containerColor = Color(0xFF2563EB)
                     )
                 ) {
 
@@ -195,23 +268,42 @@ fun RegisterScreen(
                             strokeWidth = 2.dp
                         )
                     } else {
-                        Text("Create Account")
+                        Text(
+                            text = "Create Account",
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(18.dp))
 
-                // 🔙 Back to Login
-                Text(
-                    text = "Already have an account? Login",
-                    color = Color(0xFF2C5364),
-                    fontSize = 13.sp,
-                    modifier = Modifier.clickable {
-                        navController.navigate("login") {
-                            popUpTo("register") { inclusive = true }
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+
+                    Text(
+                        text = "Already have an account?",
+                        color = Color.LightGray,
+                        fontSize = 13.sp
+                    )
+
+                    Spacer(modifier = Modifier.width(6.dp))
+
+                    Text(
+                        text = "Login",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 13.sp,
+                        modifier = Modifier.clickable {
+                            navController.navigate("login") {
+                                popUpTo("register") {
+                                    inclusive = true
+                                }
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
     }

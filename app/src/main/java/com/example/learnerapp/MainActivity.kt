@@ -12,7 +12,6 @@ import com.example.learnerapp.presentation.navigation.BottomBar
 import com.example.learnerapp.presentation.navigation.NavGraph
 import com.example.learnerapp.ui.theme.LearnerAppTheme
 import com.google.firebase.FirebaseApp
-
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
