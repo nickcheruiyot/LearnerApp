@@ -21,10 +21,8 @@ import com.example.learnerapp.presentation.schools.SchoolsScreen
 import com.example.learnerapp.presentation.schools.SchoolsViewModel
 import com.example.learnerapp.presentation.units.UnitsScreen
 import com.example.learnerapp.presentation.units.UnitsViewModel
-
 @Composable
 fun NavGraph(navController: NavHostController) {
-
     NavHost(
         navController = navController,
         startDestination = Screen.Login.route
@@ -44,7 +42,6 @@ fun NavGraph(navController: NavHostController) {
             val vm: InstitutionsViewModel = viewModel()
             InstitutionsScreen(navController, vm)
         }
-
         composable(
             Screen.Schools.route,
             arguments = listOf(navArgument("institution") { type = NavType.StringType })

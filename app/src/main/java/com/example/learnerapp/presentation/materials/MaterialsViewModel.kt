@@ -6,13 +6,11 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-
 sealed class MaterialsState {
     object Loading : MaterialsState()
     data class Success(val materials: List<Material>) : MaterialsState()
     object Empty : MaterialsState()
 }
-
 class MaterialsViewModel : ViewModel() {
 
     private val _state = MutableStateFlow<MaterialsState>(MaterialsState.Loading)
@@ -72,7 +70,6 @@ class MaterialsViewModel : ViewModel() {
                         .child(unit)
                         .child(id)
                         .setValue(material)
-
                     //  refresh list after upload
                     loadMaterials(unit)
                 }

@@ -23,14 +23,12 @@ import com.example.learnerapp.data.model.Material
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-
 @Composable
 fun MaterialsScreen(
     navController: NavController,
     unit: String,
     viewModel: MaterialsViewModel
 ) {
-
     val context = LocalContext.current
 
     val categories = listOf(
@@ -106,7 +104,7 @@ fun MaterialsScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🔹 CATEGORY LIST
+        //  CATEGORY LIST
         if (selectedCategory == null) {
 
             LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -151,7 +149,7 @@ fun MaterialsScreen(
             }
         }
 
-        // 🔹 MATERIALS UNDER CATEGORY
+        // MATERIALS UNDER CATEGORY
         else {
 
             Text(

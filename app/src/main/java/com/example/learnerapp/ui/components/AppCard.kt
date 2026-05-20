@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
 @Composable
 fun AppCard(
     title: String,
@@ -32,14 +31,12 @@ fun AppCard(
         ),
         elevation = CardDefaults.cardElevation(8.dp)
     ) {
-
         Row(
             modifier = Modifier
                 .padding(20.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-
             Column {
                 Text(title, color = Color.White, fontSize = 18.sp)
                 Text(subtitle, color = Color.LightGray, fontSize = 14.sp)

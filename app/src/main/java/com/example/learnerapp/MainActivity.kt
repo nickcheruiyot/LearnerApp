@@ -13,29 +13,22 @@ import com.example.learnerapp.presentation.navigation.NavGraph
 import com.example.learnerapp.ui.theme.LearnerAppTheme
 import com.google.firebase.FirebaseApp
 class MainActivity : ComponentActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this)
         enableEdgeToEdge()
-
         setContent {
             LearnerAppTheme {
-
                 val navController = rememberNavController()
-
                 // Detect current route
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
-
-                // Screens without bottom bar
                 val hideBottomBarScreens = listOf(
                     "login",
                     "register"
                 )
-
                 Scaffold(
                     bottomBar = {
                         if (currentRoute !in hideBottomBarScreens) {
@@ -43,7 +36,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { innerPadding ->
-
                     androidx.compose.foundation.layout.Box(
                         modifier = androidx.compose.ui.Modifier.padding(innerPadding)
                     ) {

@@ -19,18 +19,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.learnerapp.ui.components.AppCard
 import com.example.learnerapp.ui.theme.PinkGradient
-
 @Composable
 fun SchoolsScreen(
     navController: NavController,
     institution: String,
     viewModel: SchoolsViewModel
 ) {
-
     LaunchedEffect(institution) {
         viewModel.loadSchools(institution)
     }
-
     val schools = viewModel.schools.collectAsState().value
 
     Column(

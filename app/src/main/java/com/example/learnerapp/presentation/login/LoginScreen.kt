@@ -25,7 +25,6 @@ fun LoginScreen(
     navController: NavController,
     authViewModel: AuthViewModel
 ) {
-
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
@@ -79,14 +78,12 @@ fun LoginScreen(
                 containerColor = Color.White.copy(alpha = 0.08f)
             )
         ) {
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(28.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-
                 Text(
                     text = "LearnerApp",
                     fontSize = 30.sp,

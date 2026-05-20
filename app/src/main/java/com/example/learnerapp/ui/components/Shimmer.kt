@@ -9,10 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-
 @Composable
 fun ShimmerItem() {
-
     val transition = rememberInfiniteTransition(label = "shimmer")
 
     val alpha by transition.animateFloat(
@@ -24,7 +22,6 @@ fun ShimmerItem() {
         ),
         label = "alpha"
     )
-
     Card(
         modifier = Modifier
             .fillMaxWidth()

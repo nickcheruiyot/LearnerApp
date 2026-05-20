@@ -9,7 +9,6 @@ sealed class AuthState {
     object Success : AuthState()
     data class Error(val message: String) : AuthState()
 }
-
 class AuthViewModel : ViewModel() {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()

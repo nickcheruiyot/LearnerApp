@@ -3,13 +3,11 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-
 sealed class UnitsState {
     object Loading : UnitsState()
     data class Success(val units: List<String>) : UnitsState()
     object Empty : UnitsState()
 }
-
 class UnitsViewModel : ViewModel() {
 
     private val _state = MutableStateFlow<UnitsState>(UnitsState.Loading)
@@ -24,7 +22,6 @@ class UnitsViewModel : ViewModel() {
             "$course Unit 2",
             "$course Unit 3"
         )
-
         _state.value = if (data.isEmpty()) {
             UnitsState.Empty
         } else {

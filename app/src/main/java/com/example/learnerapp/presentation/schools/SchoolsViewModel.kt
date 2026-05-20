@@ -3,9 +3,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-
 class SchoolsViewModel : ViewModel() {
-
     private val schoolsData = mapOf(
 
         "University of Nairobi" to listOf(
@@ -25,7 +23,6 @@ class SchoolsViewModel : ViewModel() {
             "School of Engineering"
         )
     )
-
     private val _schools = MutableStateFlow<List<String>>(emptyList())
     val schools: StateFlow<List<String>> = _schools.asStateFlow()
 

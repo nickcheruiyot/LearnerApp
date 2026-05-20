@@ -123,7 +123,6 @@ fun CourseLevelsScreen(
                 }
             }
 
-            // EMPTY STATE (FIXES YOUR ERROR)
             is LevelsState.Empty -> {
                 Text(
                     text = "No semesters available",

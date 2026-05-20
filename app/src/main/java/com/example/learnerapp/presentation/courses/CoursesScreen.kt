@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.learnerapp.ui.components.AppCard
 import com.example.learnerapp.ui.theme.DarkGradient
-
 @Composable
 fun CoursesScreen(
     navController: NavController,

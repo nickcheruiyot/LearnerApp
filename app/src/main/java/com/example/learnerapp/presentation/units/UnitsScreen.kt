@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.unit.*
 import androidx.navigation.NavController
 import com.example.learnerapp.ui.components.ShimmerItem
-
 @Composable
 fun UnitsScreen(
     navController: NavController,
@@ -20,13 +19,10 @@ fun UnitsScreen(
     level: String,
     viewModel: UnitsViewModel
 ) {
-
     LaunchedEffect(course, level) {
         viewModel.loadUnits(course, level)
     }
-
     val state = viewModel.state.collectAsState().value
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -37,7 +33,6 @@ fun UnitsScreen(
             )
             .padding(16.dp)
     ) {
-
         Text("📚 $course", color = Color.White, fontSize = 26.sp)
         Text("Semester $level", color = Color.LightGray)
 
